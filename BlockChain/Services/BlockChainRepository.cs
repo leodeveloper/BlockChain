@@ -1,4 +1,5 @@
 ﻿using BlockChain.Dto;
+using BlockChain.Utility;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,24 @@ namespace BlockChain.Services
             blockChainDto.BlockChain.Add(blockDto);
         }
 
+        private bool isChainValid()
+        {
+            //the first block will be a gensis block that's start from 1 instead of 0
+            for (int i = 1; i < this.blockChainDto.BlockChain.Count(); i++)
+            {
+                BlockDto currentBlock = this.blockChainDto.BlockChain[i];
+                BlockDto previousBlock = this.blockChainDto.BlockChain[i - 1];
 
+                if(currentBlock.PreviousHash != previousBlock.Hash)
+                {
+                    return false;
+                }
+                if(currentBlock.Hash != currentBlock.CalculateHash())
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

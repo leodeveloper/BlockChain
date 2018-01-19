@@ -48,6 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BlockChainRepository.cs" />
     <Compile Include="Services\IBlockChainRepository.cs" />
+    <Compile Include="Utility\HashGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
