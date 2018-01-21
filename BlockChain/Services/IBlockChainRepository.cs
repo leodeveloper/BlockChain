@@ -1,14 +1,16 @@
 ﻿using BlockChain.Dto;
+using System.Collections.Generic;
 
 namespace BlockChain.Services
 {
     public interface IBlockChainGetRepository
     {
         BlockDto GetLatestBlock();
+        IList<BlockDto> GetAllBlocks();
     }
 
     public interface IBlockChainAddRepository
     {
-        void AddBlockIntoBlockChain(BlockDto blockDto);
+        bool AddBlockIntoBlockChain(BlockDto blockDto);
     }
 }

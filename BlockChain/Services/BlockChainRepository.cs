@@ -12,6 +12,7 @@ namespace BlockChain.Services
     public class BlockChainRepository : IBlockChainGetRepository, IBlockChainAddRepository
     {
         private BlockChainDto blockChainDto;
+        private int difficulty = 4;
         public BlockChainRepository()
         {
             blockChainDto = new BlockChainDto();
@@ -27,14 +28,23 @@ namespace BlockChain.Services
             return blockChainDto.BlockChain;
         }
 
-        public void AddBlockIntoBlockChain(BlockDto blockDto)
+        public bool AddBlockIntoBlockChain(BlockDto newBlockDto)
         {
-            blockChainDto.BlockChain.Add(blockDto);
+            newBlockDto.PreviousHash = GetLatestBlock().Hash;
+            newBlockDto.mineBlock(difficulty);
+            blockChainDto.BlockChain.Add(newBlockDto);
+            //if the new block does not validate the chain remove from the chain
+            if (isChainValid() != true)
+            {
+                blockChainDto.BlockChain.Remove(newBlockDto);
+                return false;
+            }
+            return true;
         }
 
         private bool isChainValid()
         {
-            //the first block will be a gensis block that's start from 1 instead of 0
+            //the first block will be a gensis block that's why start from 1 instead of 0
             for (int i = 1; i < this.blockChainDto.BlockChain.Count(); i++)
             {
                 BlockDto currentBlock = this.blockChainDto.BlockChain[i];
@@ -44,10 +54,10 @@ namespace BlockChain.Services
                 {
                     return false;
                 }
-                if(currentBlock.Hash != currentBlock.CalculateHash())
-                {
-                    return false;
-                }
+                //if(currentBlock.Hash != currentBlock.CalculateHash())
+                //{
+                //    return false;
+                //}
             }
             return true;
         }
